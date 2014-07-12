@@ -13,6 +13,8 @@ Rectangle {
         property color normal_color: "#2f2f2f"
         property color icon_color: "#eee"
         signal clicked(string title)
+        signal onEntered(string title)
+        signal onExited(string title)
 
         Behavior on icon_color { PropertyAnimation {} }
 
@@ -44,7 +46,13 @@ Rectangle {
             }
             hoverEnabled: true
 
-            onEntered: { parent.hovered = true }
-            onExited: { parent.hovered = false }
+            onEntered: {
+                parent.hovered = true
+                btn.onEntered(parent.title)
+            }
+            onExited: {
+                parent.hovered = false
+                btn.onExited(parent.title)
+            }
         }
     }

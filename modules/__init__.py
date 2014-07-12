@@ -59,10 +59,15 @@ class BasePlugin(QObject):
         self._icon = icon
         self._title = title
         self._color = '#eee'
-        self.clicked.connect(self.clickedAction)
 
     def clickedAction(self, parent):
-        print("not overloaded")
+        pass
+
+    def hoveredAction(self, parent):
+        pass
+
+    def unhoveredAction(self, parent):
+        pass
 
 
 def findModules():
