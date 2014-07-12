@@ -1,10 +1,12 @@
-from modules import BasePlugin
+from modules import BasePlugin, Icons
 
-__icon__ = BasePlugin.Icons.Cube
+__icon__ = Icons.Cube
 __title__ = "Cube"
 __order__ = 1
 
+import random
+r = lambda: random.randint(0, 255)
 
 class CubePlugin(BasePlugin):
-    def clickedAction(self):
-        print("looooo")
+    def clickedAction(self, parent):
+        self.icon_color = '#%02X%02X%02X' % (r(), r(), r())

@@ -11,11 +11,14 @@ Rectangle {
         property string title
         property color active_color: "#555"
         property color normal_color: "#2f2f2f"
-        signal clicked
+        property color icon_color: "#eee"
+        signal clicked(string title)
+
+        Behavior on icon_color { PropertyAnimation {} }
 
         property bool hovered
         Text {
-            color: '#eee'
+            color: parent.icon_color
             anchors.centerIn: parent
             font.pointSize: 18
             font.family: "FontAwesome"
@@ -37,7 +40,7 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                btn.clicked()
+                btn.clicked(parent.title)
             }
             hoverEnabled: true
 

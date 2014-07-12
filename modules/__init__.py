@@ -14,13 +14,24 @@ import inspect
 import json
 
 _icons = json.load(open(os.path.join(CWD, "modules", "icons.json"), "r"))
+Icons = namedtuple("Icons", _icons.keys())(**_icons)
 
 
 class BasePlugin(QObject):
     iconChanged = pyqtSignal()
     titleChanged = pyqtSignal()
     clicked = pyqtSignal()
-    Icons = namedtuple("Icons", _icons.keys())(**_icons)
+    colorChanged = pyqtSignal()
+
+    @pyqtProperty(str, notify=colorChanged)
+    def icon_color(self):
+        return self._color
+
+    @icon_color.setter
+    def icon_color(self, color):
+        if self._color != color:
+            self._color = color
+            self.colorChanged.emit()
 
     @pyqtProperty(str, notify=iconChanged)
     def icon(self):
@@ -47,9 +58,10 @@ class BasePlugin(QObject):
 
         self._icon = icon
         self._title = title
+        self._color = '#eee'
         self.clicked.connect(self.clickedAction)
 
-    def clickedAction(self):
+    def clickedAction(self, parent):
         print("not overloaded")
 
 
@@ -108,4 +120,5 @@ def processPlugin(module):
 
 plugins = [loadModule(name) for name in findModules()]
 elements = sorted([processPlugin(p) for p in plugins], key=lambda x: x.order)
+named_elements = {e.title: e for e in elements}
 print(elements)
