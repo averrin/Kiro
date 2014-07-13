@@ -76,6 +76,8 @@ class BaseModule(QObject):
     def message(self, msg):
         print(msg)
 
+    def beforeLoad(self):
+        pass
 
 modules = []
 import importlib

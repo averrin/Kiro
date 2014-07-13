@@ -6,12 +6,17 @@ import "frontend/qml/widgets"
 import "modules/plus/ui"
 
 ListView {
+    //height: parent.height
     signal message(string sender, string msg)
     anchors.fill: parent
+    model: NotificationModel
+    orientation: Qt.Vertical
+    clip: true
 
-    NotificationItem {
-        title: "Really Important Notification"
-        short_text: "for some reason"
-        time: "20:54"
+    delegate: NotificationItem {
+        title: model.title
+        short_text: model.short_text
+        time: model.time
+        icon: model.icon
     }
 }

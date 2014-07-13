@@ -18,6 +18,7 @@ Rectangle {
         signal onExited(string title)
 
         Behavior on icon_color { PropertyAnimation {} }
+        Behavior on icon { PropertyAnimation {} }
 
         property bool hovered
         Text {

@@ -18,8 +18,7 @@ class App(object):
     def __init__(self):
         self.view = QQuickView()
         self.elementModel = modules.elements
-        for e in self.elementModel:
-            e.app = self
+
         self.icon = QSystemTrayIcon(QIcon("frontend/cube.png"))
         self.icon.activated.connect(self.trayClicked)
         self.icon.show()
@@ -38,6 +37,10 @@ class App(object):
         self.ctx.setContextProperty('ElementModel', self.elementModel)
         self.ctx.setContextProperty("contentWidth", self.content_width)
         self.ctx.setContextProperty("elementsWidth", self.elements_width)
+
+        for e in self.elementModel:
+            e.app = self
+            e.beforeLoad()
 
         self.view.setSource(QUrl("frontend/qml/kiro.qml"))
 

@@ -15,6 +15,7 @@ Rectangle {
     property string title
     property string short_text
     property string time
+    property string icon
 
     RowLayout {
         id: layout
@@ -35,7 +36,7 @@ Rectangle {
                 anchors.centerIn: parent
                 font.pointSize: 18
                 font.family: "FontAwesome"
-                text: Font.Icon.PaperPlane
+                text: notification.icon
                 color: "#eee"
             }
         }

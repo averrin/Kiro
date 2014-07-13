@@ -13,3 +13,6 @@ class Main(BaseModule):
 
     def initAction(self):
         self.icon_color = '#D34836'
+
+    def beforeLoad(self):
+        self.app.ctx.setContextProperty('NotificationModel', notifications.notifications)
