@@ -1,0 +1,1 @@
+Some QML thing, inspired by Deepin Control Center
