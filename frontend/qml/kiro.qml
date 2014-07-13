@@ -24,6 +24,12 @@ Rectangle {
             id: contentLoader
             objectName: "ContentLoader"
             asynchronous: true
+            //container: content
+            //Behavior on source { PropertyAnimation {} }
+            width: parent.width
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.horizontalCenter : parent.horizontalCenter
         }
         Connections {
             target: contentLoader.item
@@ -54,6 +60,7 @@ Rectangle {
             signal itemClicked(string title)
             signal itemHovered(string title)
             signal itemUnhovered(string title)
+            signal itemLoaded(string title)
             delegate: Element {
                 icon: model.icon
                 title: model.title
@@ -62,6 +69,7 @@ Rectangle {
                     clicked.connect(elements.itemClicked)
                     onEntered.connect(elements.itemHovered)
                     onExited.connect(elements.itemUnhovered)
+                    elements.itemLoaded(model.title)
                 }
             }
 

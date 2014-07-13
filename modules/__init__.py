@@ -1,15 +1,12 @@
 from collections import namedtuple
-
-__author__ = 'averrin'
-
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtQuick import *
 import sys
-
-CWD = sys.path[0] + '/'
 import os
-import imp
+
+CWD = sys.path[0] + os.sep
+import os
 import inspect
 import json
 
@@ -56,55 +53,35 @@ class BaseModule(QObject):
     def __init__(self, icon='', title='', parent=None):
         super(BaseModule, self).__init__(parent)
 
+        self.app = None
         self._icon = icon
         self._title = title
-        self._color = '#eee'
+        self._color = '#ccc'
 
-    def clickedAction(self, parent):
+    def loadContent(self, fname):
+        self.app.ContentLoader.setProperty("source", os.path.join("modules", self.name.split(".")[1], fname))
+
+    def clickedAction(self):
         pass
 
-    def hoveredAction(self, parent):
+    def hoveredAction(self):
         pass
 
-    def unhoveredAction(self, parent):
+    def unhoveredAction(self):
         pass
 
-    def message(self, parent, msg):
+    def initAction(self):
+        pass
+
+    def message(self, msg):
         print(msg)
 
 
-def findModules():
-    """
-        Search plugin files
-        http://wiki.python.org/moin/ModulesAsPlugins
-    """
-    modules = set()
-    for folder in os.listdir(CWD + 'modules'):
-        if os.path.isdir(CWD + 'modules/' + folder):
-            for filename in os.listdir(CWD + 'modules/' + folder):
-                module = None
-                if not filename.startswith("__init__"):
-                    if filename.endswith(".py"):
-                        module = filename[:-3]
-                    elif filename.endswith(".pyc"):
-                        module = filename[:-4]
-                    if module is not None:
-                        modules.add(module)
-    return list(modules)
-
-
-def loadModule(name, path="modules/"):
-    """
-        Return a named module found in a given path.
-        http://wiki.python.org/moin/ModulesAsPlugins
-    """
-    (file, pathname, description) = imp.find_module(name, [CWD + path + name])
-    try:
-        return imp.load_module(name, file, pathname, description)
-    except Exception as e:
-        print("Module %s cant be loaded" % name)
-        print(e)
-        return None
+modules = []
+import importlib
+for m in os.listdir('modules'):
+    if os.path.isdir(os.path.join(CWD, 'modules', m)) and not m.startswith("_"):
+        modules.append(importlib.import_module("." + m, __name__))
 
 
 def processPlugin(module):
@@ -125,8 +102,5 @@ def processPlugin(module):
             except Exception as e:
                 raise e
 
-
-plugins = [loadModule(name) for name in findModules()]
-elements = sorted([processPlugin(p) for p in plugins], key=lambda x: x.order)
+elements = sorted([processPlugin(p) for p in modules], key=lambda x: x.order)
 named_elements = {e.title: e for e in elements}
-print(elements)

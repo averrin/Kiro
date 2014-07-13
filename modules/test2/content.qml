@@ -3,21 +3,25 @@ import QtQuick.Controls 1.2
 import "frontend/qml/font.js" as Font
 import "frontend/qml/widgets"
 
-Row {
-    spacing: 8
-    width: parent.width
-    //color: "lightblue"
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.leftMargin: 24;
-    anchors.topMargin: 18;
-    anchors.horizontalCenter : parent.horizontalCenter
+Grid {
     signal message(string sender, string msg)
-
-    DTextButton{
-        text: "Exit"
-        onClicked: {
-            parent.message("Cube", "exit")
+    columns: 2
+    spacing: 3
+    Column {
+        Image {
+            width: 150; height: 75
+            source: "frontend/qml/wall.jpg"
+            fillMode: Image.PreserveAspectCrop
         }
+            Image {
+            width: 150; height: 75
+            source: "frontend/qml/wall2.png"
+            fillMode: Image.PreserveAspectCrop
+        }
+    }
+    Image {
+        width: 150; height: 150
+        source: "frontend/qml/avatar.png"
+        fillMode: Image.PreserveAspectCrop
     }
 }

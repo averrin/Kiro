@@ -12,7 +12,7 @@ Rectangle {
         property string title
         property color active_color: "#555"
         property color normal_color: "#2f2f2f"
-        property color icon_color: "#eee"
+        property color icon_color: "#ccc"
         signal clicked(string title)
         signal onEntered(string title)
         signal onExited(string title)

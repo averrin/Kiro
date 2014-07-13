@@ -107,6 +107,7 @@ var Icon = {
     EyeClose            : "\uf070",
     WarningSign         : "\uf071",
     Plane               : "\uf072",
+    PaperPlane          : "\uf1d8",
     Calendar            : "\uf073",
     Random              : "\uf074",
     Comment             : "\uf075",

@@ -5,13 +5,7 @@ import "frontend/qml/widgets"
 
 Row {
     spacing: 8
-    width: parent.width
-    //color: "lightblue"
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.leftMargin: 24;
-    anchors.topMargin: 18;
-    anchors.horizontalCenter : parent.horizontalCenter
+    signal message(string sender, string msg)
 
     DRoundImage {
         id: round_image

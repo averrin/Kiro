@@ -18,11 +18,13 @@ class App(object):
     def __init__(self):
         self.view = QQuickView()
         self.elementModel = modules.elements
+        for e in self.elementModel:
+            e.app = self
         self.icon = QSystemTrayIcon(QIcon("frontend/cube.png"))
         self.icon.activated.connect(self.trayClicked)
         self.icon.show()
 
-        self.content_width = 300
+        self.content_width = 355
         self.elements_width = 48
         self.collapsed = True
         self.onTop = True
@@ -50,6 +52,7 @@ class App(object):
         self.Elements.itemClicked.connect(self.elementClicked)
         self.Elements.itemHovered.connect(self.elementHovered)
         self.Elements.itemUnhovered.connect(self.elementUnhovered)
+        self.Elements.itemLoaded.connect(self.elementLoaded)
 
         width = self.content_width + self.elements_width
         self.view.setWidth(width)
@@ -57,9 +60,10 @@ class App(object):
         self.sc = QApplication.desktop().availableGeometry()
         self.Screen.setProperty("height", self.sc.height())
         self.view.setPosition(QPoint(self.sc.width() - width, self.sc.top()))
-
         if self.collapsed:
             self.Screen.setProperty("width", self.Panel.width())
+            item = modules.named_elements["Close"]
+            item.icon = modules.Icons.Remove
         # if self.onTop:
         #     self.view.setFlags(self.view.flags() | Qt.WindowStaysOnTopHint)
 
@@ -67,15 +71,19 @@ class App(object):
 
     def elementClicked(self, item):
         item = modules.named_elements[item]
-        item.clickedAction(self)
+        item.clickedAction()
+
+    def elementLoaded(self, item):
+        item = modules.named_elements[item]
+        item.initAction()
 
     def elementHovered(self, item):
         item = modules.named_elements[item]
-        item.hoveredAction(self)
+        item.hoveredAction()
 
     def elementUnhovered(self, item):
         item = modules.named_elements[item]
-        item.unhoveredAction(self)
+        item.unhoveredAction()
 
     def widthChanged(self, w):
         self.view.setPosition(QPoint(self.sc.width() - w, self.view.position().y()))
@@ -92,16 +100,23 @@ class App(object):
 
     def toggleContent(self):
         if self.Screen.width() != self.elements_width:
-            self.Screen.setProperty("width", self.Panel.width())
+            self.closeContent()
         else:
             self.openContent()
 
+    def closeContent(self):
+        self.Screen.setProperty("width", self.Panel.width())
+        item = modules.named_elements["Close"]
+        item.icon = modules.Icons.Remove
+
     def openContent(self):
         self.Screen.setProperty("width", self.elements_width + self.content_width)
+        item = modules.named_elements["Close"]
+        item.icon = modules.Icons.ChevronRight
 
     def contentSignal(self, item, msg):
         item = modules.named_elements[item]
-        item.message(self, msg)
+        item.message(msg)
 
 
 app = QApplication(sys.argv)
