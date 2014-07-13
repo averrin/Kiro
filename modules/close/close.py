@@ -1,11 +1,11 @@
-from modules import BasePlugin, Icons
+from modules import BaseModule, Icons
 
 __icon__ = Icons.Remove
 __title__ = "Close"
 __order__ = 99
 
 
-class TestPlugin(BasePlugin):
+class TestModule(BaseModule):
     def clickedAction(self, parent):
         exit()
 

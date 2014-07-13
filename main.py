@@ -24,25 +24,29 @@ class App(object):
 
         self.content_width = 300
         self.elements_width = 48
-        self.collapsed = False
+        self.collapsed = True
         self.onTop = True
 
         self.view.setObjectName("View")
         self.view.setFlags(Qt.FramelessWindowHint)
+
         self.ctx = self.view.rootContext()
         self.ctx.setContextProperty("viewerWidget", self.view)
         self.ctx.setContextProperty("viewerPosition", self.view.position())
         self.ctx.setContextProperty('ElementModel', self.elementModel)
-
         self.ctx.setContextProperty("contentWidth", self.content_width)
         self.ctx.setContextProperty("elementsWidth", self.elements_width)
+
         self.view.setSource(QUrl("frontend/qml/kiro.qml"))
 
         self.Screen = self.view.rootObject()
-        self.Screen.resized.connect(self.widthChanged)
         self.Panel = self.Screen.findChild(QObject, "ElementPanel")
         self.Content = self.Screen.findChild(QObject, "Content")
+        self.Content.message.connect(self.contentSignal)
+        self.ContentLoader = self.Content.findChild(QObject, "ContentLoader")
         self.Elements = self.Panel.findChild(QObject, "Elements")
+
+        self.Screen.resized.connect(self.widthChanged)
         self.Elements.itemClicked.connect(self.elementClicked)
         self.Elements.itemHovered.connect(self.elementHovered)
         self.Elements.itemUnhovered.connect(self.elementUnhovered)
@@ -53,10 +57,11 @@ class App(object):
         self.sc = QApplication.desktop().availableGeometry()
         self.Screen.setProperty("height", self.sc.height())
         self.view.setPosition(QPoint(self.sc.width() - width, self.sc.top()))
+
         if self.collapsed:
             self.Screen.setProperty("width", self.Panel.width())
-        if self.onTop:
-            self.view.setFlags(self.view.flags() | Qt.WindowStaysOnTopHint)
+        # if self.onTop:
+        #     self.view.setFlags(self.view.flags() | Qt.WindowStaysOnTopHint)
 
         self.view.show()
 
@@ -67,6 +72,7 @@ class App(object):
     def elementHovered(self, item):
         item = modules.named_elements[item]
         item.hoveredAction(self)
+
     def elementUnhovered(self, item):
         item = modules.named_elements[item]
         item.unhoveredAction(self)
@@ -80,18 +86,22 @@ class App(object):
         elif ev == QSystemTrayIcon.Trigger:
             self.onTop = not self.onTop
             if self.onTop:
-                self.view.setFlags(self.view.flags() | Qt.WindowStaysOnTopHint)
+                self.view.setFlags(self.view.flags() | Qt.Popup)
             else:
-                self.view.setFlags(self.view.flags() & ~Qt.WindowStaysOnTopHint)
-            print(bin(int(self.view.flags())), self.onTop)
-            self.view.hide()
-            self.view.show()
+                self.view.setFlags(self.view.flags() & ~Qt.Popup)  # broken =(
 
     def toggleContent(self):
         if self.Screen.width() != self.elements_width:
             self.Screen.setProperty("width", self.Panel.width())
         else:
-            self.Screen.setProperty("width", self.elements_width + self.content_width)
+            self.openContent()
+
+    def openContent(self):
+        self.Screen.setProperty("width", self.elements_width + self.content_width)
+
+    def contentSignal(self, item, msg):
+        item = modules.named_elements[item]
+        item.message(self, msg)
 
 
 app = QApplication(sys.argv)

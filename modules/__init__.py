@@ -17,7 +17,7 @@ _icons = json.load(open(os.path.join(CWD, "modules", "icons.json"), "r"))
 Icons = namedtuple("Icons", _icons.keys())(**_icons)
 
 
-class BasePlugin(QObject):
+class BaseModule(QObject):
     iconChanged = pyqtSignal()
     titleChanged = pyqtSignal()
     clicked = pyqtSignal()
@@ -54,7 +54,7 @@ class BasePlugin(QObject):
             self.titleChanged.emit()
 
     def __init__(self, icon='', title='', parent=None):
-        super(BasePlugin, self).__init__(parent)
+        super(BaseModule, self).__init__(parent)
 
         self._icon = icon
         self._title = title
@@ -68,6 +68,9 @@ class BasePlugin(QObject):
 
     def unhoveredAction(self, parent):
         pass
+
+    def message(self, parent, msg):
+        print(msg)
 
 
 def findModules():
@@ -111,7 +114,7 @@ def processPlugin(module):
     if module is not None:
         for obj in list(module.__dict__.values()):
             try:
-                if inspect.isclass(obj) and issubclass(obj, BasePlugin) and obj is not BasePlugin:
+                if inspect.isclass(obj) and issubclass(obj, BaseModule) and obj is not BaseModule:
                     plugin = obj(module.__icon__, module.__title__)
                     plugin.name = module.__name__
                     plugin.order = module.__order__

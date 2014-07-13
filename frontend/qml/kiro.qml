@@ -18,31 +18,16 @@ Rectangle {
         color: "#232323"
         height: parent.height
         width: parent.width - elementPanel.width
+        signal message(string sender, string msg)
 
-        Row {
-            spacing: 8
-            width: parent.width
-            //color: "lightblue"
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.leftMargin: 24;
-            anchors.topMargin: 18;
-            anchors.horizontalCenter : parent.horizontalCenter
-
-            DRoundImage {
-                id: round_image
-
-                roundRadius: 30
-                borderWidth: 2
-                glowRadius: 2
-                imageSource: "avatar.png"
-
-            }
-            Text {
-                font.pointSize: 10
-                color: "#eee"
-                text: "Alexey 'Averrin' Nabrodov"
-            }
+        Loader {
+            id: contentLoader
+            objectName: "ContentLoader"
+            asynchronous: true
+        }
+        Connections {
+            target: contentLoader.item
+            onMessage: content.message(sender, msg)
         }
     }
 
