@@ -1,7 +1,7 @@
-import QtQuick 2.3
-import QtQuick.Controls 1.2
-import "frontend/qml/font.js" as Font
-import "frontend/qml/widgets"
+import QtQuick 2.2
+import QtQuick.Controls 1.1
+import "../../frontend/qml/font.js" as Font
+import "../../frontend/qml/widgets"
 
 Row {
     spacing: 8
@@ -13,7 +13,7 @@ Row {
         roundRadius: 30
         borderWidth: 2
         glowRadius: 2
-        imageSource: "frontend/qml/avatar.png"
+        imageSource: "../../frontend/qml/avatar.png"
 
     }
     Text {

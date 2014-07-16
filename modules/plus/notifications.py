@@ -1,11 +1,38 @@
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtQuick import *
+from PyQt5.QtQml import *
 import datetime
 from modules import Icons
 
 
-class Notification(QObject):
+class NotificationModel(QAbstractListModel):
+    def __init__(self, mlist):
+        QAbstractListModel.__init__(self)
+
+        # Store the passed data list as a class member.
+        self._items = mlist
+
+    # We need to tell the view how many rows we have present in our data. see tutorial #3
+    def rowCount(self, parent=None):
+        return len(self._items)
+
+    def getItems(self, index, role):
+        raise Exception()
+    def get(self, index):
+        raise Exception()
+
+    def flags(self, index):
+        print("bzz")
+        return Qt.ItemIsSelectable | Qt.ItemIsEditable | Qt.ItemIsEnabled
+
+    def addItem(self, item):
+        print(item.title)
+        self.beginInsertRows(QModelIndex(), len(self._items), len(self._items))
+        self._items.append(item)
+        self.endInsertRows()
+
+class Notification(QVariant):
     iconChanged = pyqtSignal()
     titleChanged = pyqtSignal()
     clicked = pyqtSignal()
@@ -63,7 +90,10 @@ class Notification(QObject):
         self._short_text = short_text
         self._time = str(datetime.datetime.now().time().strftime("%H:%M"))
 
-notifications = [
-    Notification(Icons.PaperPlane, "Plane", "To the sky..."),
-    Notification(Icons.Fire, "Fire", "Burn Forest, BURN!!!!")
-]
+        print(self.__dict__)
+
+
+notifications = NotificationModel([
+    # Notification(Icons.PaperPlane, "Plane", "To the sky..."),
+    # Notification(Icons.Fire, "Fire", "Burn Forest, BURN!!!!")
+])

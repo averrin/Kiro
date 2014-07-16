@@ -1,8 +1,9 @@
-import QtQuick 2.3
-import QtQuick.Controls 1.2
+import QtQuick 2.2
+import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 import "../../../frontend/qml/font.js" as Font
 import "../../../frontend/qml/widgets"
+import NModel 1.0
 
 Rectangle {
     id: notification
@@ -12,10 +13,7 @@ Rectangle {
     border.width: 1
     border.color: "#3c3c3c"
 
-    property string title
-    property string short_text
-    property string time
-    property string icon
+    property variant notification_item
 
     RowLayout {
         id: layout
@@ -36,7 +34,7 @@ Rectangle {
                 anchors.centerIn: parent
                 font.pointSize: 18
                 font.family: "FontAwesome"
-                text: notification.icon
+                text: notification_item.icon
                 color: "#eee"
             }
         }
@@ -52,22 +50,22 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: 4
                 anchors.topMargin: 2
-                Layout.minimumWidth: notification.width - noti_icon.width - 12
-                Layout.preferredWidth: notification.width - noti_icon.width - 12
-                Layout.maximumWidth: notification.width - noti_icon.width - 12
+                Layout.minimumWidth: notification.width - noti_icon.width - 16
+                Layout.preferredWidth: notification.width - noti_icon.width - 16
+                Layout.maximumWidth: notification.width - noti_icon.width - 16
 
                 Text {
 
                     color: "#eee"
                     font.pointSize: 10
-                    text: notification.title
+                    text: notification_item.title
                 }
 
                 Text {
                     anchors.right: parent.right
                     color: "#ccc"
                     font.pointSize: 8
-                    text: notification.time
+                    text: notification_item.time
                 }
 
             }
@@ -83,7 +81,7 @@ Rectangle {
                 Text {
                     color: "#ccc"
                     font.pointSize: 8
-                    text: notification.short_text
+                    text: notification_item.short_text
                 }
                 Text {
                     anchors.right: parent.right

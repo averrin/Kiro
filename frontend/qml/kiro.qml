@@ -1,5 +1,5 @@
-import QtQuick 2.3
-import QtQuick.Controls 1.2
+import QtQuick 2.2
+import QtQuick.Controls 1.1
 import "font.js" as Font
 import "custom"
 import "widgets"
@@ -27,6 +27,7 @@ Rectangle {
             //container: content
             //Behavior on source { PropertyAnimation {} }
             width: parent.width
+            height: parent.height
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.horizontalCenter : parent.horizontalCenter
